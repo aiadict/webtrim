@@ -3,14 +3,14 @@
 (function () {
   'use strict';
 
-  // Fix #13: Normalize domain — strip leading www. so rules saved on www.google.com
+  // Normalize domain — strip leading www. so rules saved on www.google.com
   // also apply when the user lands on google.com and vice versa.
   function normalizeDomain(hostname) {
     return hostname.replace(/^www\./, '');
   }
 
   const domain = normalizeDomain(location.hostname);
-  // Fix #15: Namespace storage key to avoid collisions with other extensions.
+  // Namespace storage key to avoid collisions with other extensions.
   const storageKey = 'webtrim::' + domain;
 
   let rules = [];
@@ -18,10 +18,10 @@
   let pickerHiddenCount = 0;
   let pauseMode = false;
   let highlightEl = null;
-  // Fix #10: Save the element's existing outline before overwriting it.
+  // Save the element's existing outline before overwriting it.
   let _savedOutline = '';
   let _savedOutlineOffset = '';
-  // Round 2 Fix #1: Page-level picker banner element reference.
+  // Page-level picker banner element reference.
   let bannerEl = null;
 
   // --- CSS-based hiding ---
@@ -72,7 +72,7 @@
 
   function hideByText(text) {
     const lower = text.toLowerCase();
-    // Fix #9: Exclude text nodes inside <script>, <style>, <noscript>, <template>
+    // Exclude text nodes inside <script>, <style>, <noscript>, <template>
     // so matching a string that appears in inline JS never hides a script tag.
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode(node) {
@@ -163,7 +163,7 @@
   }
 
   const observer = new MutationObserver((mutations) => {
-    // Fix #1: Exclude mutations caused by our own styleEl changes.
+    // Exclude mutations caused by our own styleEl changes.
     // Setting styleEl.textContent creates a childList mutation that would
     // otherwise cause an infinite observer → rebuild → observer loop.
     const hasNewNodes = mutations.some(m => {
@@ -185,7 +185,7 @@
     });
   }
 
-  // --- Picker banner (Round 2 Fix #1) ---
+  // --- Picker banner ---
   // Injected into the page when picker mode is active so the user knows what to do.
   // pointer-events: none lets clicks pass through to the element underneath.
 
@@ -272,7 +272,7 @@
 
   // --- Element picker ---
 
-  // Fix #7: Improved selector generation.
+  // Improved selector generation.
   // Priority: id → stable data-* attributes → tag+filtered-classes → nth-of-type.
   // Filters out generated class names (hashes, styled-components) that break
   // across deployments on React/Next.js/Vue apps.
@@ -340,7 +340,7 @@
     return parts.join(' > ');
   }
 
-  // Fix #6 (Round 3): Extract a human-readable label from the clicked element.
+  // Extract a human-readable label from the clicked element.
   // Stored alongside the CSS selector so the popup can show meaningful text
   // instead of raw selectors like "div.UDZeY > div.RNNXgb".
   function extractLabel(el) {
@@ -366,7 +366,7 @@
   }
 
   function onPickerClick(e) {
-    // Fix #3, #4: Guard against picking body, html, our style element, or the picker
+    // Guard against picking body, html, our style element, or the picker
     // banner itself. Clicking body produces an empty selector that breaks the stylesheet.
     if (
       e.target === document.body ||
@@ -446,7 +446,7 @@
     hidePickerBanner();
   }
 
-  // --- Pause overlay (Fix #20, Round 4) ---
+  // --- Pause overlay ---
   // When paused, instead of simply showing everything, mark formerly-hidden
   // elements with a red dashed outline so the user can see exactly what
   // the extension is controlling. Selector-rule elements need an explicit
@@ -514,8 +514,8 @@
 
   // --- Init ---
 
-  // Fix #14: Check chrome.runtime.lastError to avoid silent failures.
-  // Fix #16: Handle schema versioning — assign UUIDs to rules that predate fix #2.
+  // Check chrome.runtime.lastError to avoid silent failures.
+  // Handle schema versioning — assign UUIDs to rules that predate fix #2.
   chrome.storage.local.get([storageKey], (result) => {
     if (chrome.runtime.lastError) return;
     const stored = result[storageKey] || {};

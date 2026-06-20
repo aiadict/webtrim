@@ -15,7 +15,7 @@ function normalizeData(raw) {
         label: r.label || r.value,
         disabled: r.disabled || false,
       }))
-      // Fix #5: Drop corrupted rules (missing/wrong type, missing/empty value)
+      // Drop corrupted rules (missing/wrong type, missing/empty value)
       // so they never reach the content script and cause hidden elements or CSS errors.
       .filter(r =>
         (r.type === 'selector' || r.type === 'text') &&
@@ -65,7 +65,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
 
   if (action === 'addRule') {
-    // Fix #9: Validate incoming rule before touching storage.
+    // Validate incoming rule before touching storage.
     if (
       !msg.rule?.value?.trim() ||
       !['selector', 'text'].includes(msg.rule?.type)
@@ -101,7 +101,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           if (targetTabId) {
             chrome.tabs.sendMessage(targetTabId, { action: 'rulesUpdated', rules: data.rules }).catch(() => {});
           }
-          // Fix #4b: Signal duplicate so the popup can show "Already added" instead
+          // Signal duplicate so the popup can show "Already added" instead
           // of "✓ Saved permanently" — same data, different user feedback.
           sendResponse({ ok: true, duplicate: isDuplicate, rules: data.rules });
           resolve();
@@ -112,7 +112,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
 
   if (action === 'getRules') {
-    // Fix #6: Route through enqueue so a getRules that arrives while addRule writes
+    // Route through enqueue so a getRules that arrives while addRule writes
     // are in-flight waits for them to complete before reading — prevents stale list.
     enqueue(msg.domain, () => new Promise(resolve => {
       chrome.storage.local.get([key], (result) => {

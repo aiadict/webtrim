@@ -7,7 +7,7 @@ let pickerActive = false;
 let pauseActive = false;
 let contentScriptAvailable = true;
 
-// Fix #8 (Round 3): Pending deletion state for the undo window.
+// Pending deletion state for the undo window.
 let pendingDelete = null;
 
 const $ = id => document.getElementById(id);
@@ -16,7 +16,7 @@ function normalizeDomain(hostname) {
   return hostname.replace(/^www\./, '');
 }
 
-// Fix #10 (Round 2): Domain-aware quick-add chips.
+// Domain-aware quick-add chips.
 const DOMAIN_SUGGESTIONS = {
   'google.com':    ['AI Overview', 'Sponsored', 'People also ask', 'More results'],
   'linkedin.com':  ['Promoted', 'Suggested', 'People also viewed'],
@@ -59,7 +59,7 @@ async function init() {
   renderSuggestions();
   bindEvents();
 
-  // Fix #14 (Round 4): Load hidden element count asynchronously — doesn't block UI.
+  // Load hidden element count asynchronously — doesn't block UI.
   loadHiddenCount();
 }
 
@@ -116,7 +116,7 @@ function stopPickerSync() {
   pickerSyncTimer = null;
 }
 
-// Fix #14 (Round 4): Query the content script for the number of elements
+// Query the content script for the number of elements
 // currently hidden on the page. Shown alongside the rule count in the header.
 async function loadHiddenCount() {
   if (!currentTabId || !contentScriptAvailable) return;
@@ -152,15 +152,15 @@ function renderRules() {
   const countEl = $('rules-count');
   const pauseBtn = $('btn-pause');
 
-  // Fix #12: Count badge only visible when rules exist
+  // Count badge only visible when rules exist
   countEl.style.display = rules.length > 0 ? '' : 'none';
   if (rules.length > 0) countEl.textContent = rules.length;
 
-  // Fix #4: "Show Hidden" button only makes sense when there is something to reveal
+  // "Show Hidden" button only makes sense when there is something to reveal
   pauseBtn.style.display = rules.length > 0 ? '' : 'none';
 
   if (rules.length === 0) {
-    // Fix #11 (Round 4): Two-card instructional empty state
+    // Two-card instructional empty state
     list.innerHTML = `
       <div class="empty-state">
         <div class="empty-card">
@@ -181,10 +181,10 @@ function renderRules() {
     return;
   }
 
-  // Fix #6 (Round 3): Display human label instead of raw CSS selector.
+  // Display human label instead of raw CSS selector.
   //   rule.label = element text captured at pick time (or the text string for text rules)
   //   rule.value = raw CSS selector — shown in tooltip for power users
-  // Fix #7 (Round 3): CSS toggle switch instead of ●/○ buttons.
+  // CSS toggle switch instead of ●/○ buttons.
   list.innerHTML = rules.map(rule => {
     const displayLabel = escapeHtml(rule.label || rule.value);
     const selectorTip  = rule.type === 'selector' ? escapeHtml(rule.value) : '';
@@ -209,7 +209,7 @@ function renderRules() {
   });
 }
 
-// Fix #10 (Round 2): Render domain-aware chips, hiding already-added ones.
+// Render domain-aware chips, hiding already-added ones.
 function renderSuggestions() {
   const container = $('suggestions');
   const added = new Set(
@@ -258,7 +258,7 @@ async function addTextRule(text) {
         renderRules();
         renderSuggestions();
         loadHiddenCount();
-        // Fix #4: Show "Already added" instead of "✓ Saved" for duplicates.
+        // Show "Already added" instead of "✓ Saved" for duplicates.
         showSaveToast(res.duplicate ? 'Already added' : '✓ Saved permanently');
         resolve(true);
       }
@@ -266,7 +266,7 @@ async function addTextRule(text) {
   });
 }
 
-// Fix #8 (Round 3): Undo-able delete.
+// Undo-able delete.
 // The rule is visually faded immediately, but the actual storage delete is
 // deferred by 5 seconds. Clicking Undo within that window cancels it.
 async function deleteRule(ruleId) {
@@ -303,7 +303,7 @@ async function commitPendingDelete() {
       { action: 'deleteRule', domain: currentDomain, ruleId, tabId: currentTabId },
       res => {
         if (chrome.runtime.lastError || !res?.ok) {
-          // Fix #3: Delete failed — restore the faded row and show error.
+          // Delete failed — restore the faded row and show error.
           showErrorToast();
           renderRules();
           resolve();
@@ -342,7 +342,7 @@ async function toggleRule(ruleId) {
       { action: 'toggleRule', domain: currentDomain, ruleId, tabId: currentTabId },
       res => {
         if (chrome.runtime.lastError || !res?.ok) {
-          // Fix #3: Toggle failed — re-render from in-memory rules to reset the switch.
+          // Toggle failed — re-render from in-memory rules to reset the switch.
           showErrorToast();
           renderRules();
           resolve();
@@ -357,7 +357,7 @@ async function toggleRule(ruleId) {
   });
 }
 
-// Fix #3 (Round 4): Brief green toast after a rule is saved permanently.
+// Brief green toast after a rule is saved permanently.
 let saveToastTimer = null;
 function showSaveToast(message = '✓ Saved permanently') {
   const toast = $('save-toast');
@@ -367,7 +367,7 @@ function showSaveToast(message = '✓ Saved permanently') {
   saveToastTimer = setTimeout(() => toast.classList.remove('visible'), 2000);
 }
 
-// Fix #8: Brief red toast when storage write fails (e.g. quota exceeded).
+// Brief red toast when storage write fails (e.g. quota exceeded).
 let errorToastTimer = null;
 function showErrorToast() {
   const toast = $('error-toast');
@@ -393,7 +393,7 @@ function setPickerButtonState(active) {
   }
 }
 
-// Fix #5: Plain-language pause button labels
+// Plain-language pause button labels
 function setPauseButtonState(active) {
   const btn = $('btn-pause');
   btn.textContent = active ? 'Hide Again' : 'Show Hidden';
@@ -414,7 +414,7 @@ async function togglePicker() {
   if (!currentTabId) return;
   try {
     // Await response to confirm content script received it.
-    // Rejects on restricted pages (chrome://, PDF, etc.).
+    // Rejects on restricted pages (chrome:// , PDF, etc.).
     await chrome.tabs.sendMessage(currentTabId, { action: 'activatePicker' });
     pickerActive = true;
     window.close();
@@ -436,14 +436,14 @@ function togglePause() {
 function bindEvents() {
   $('btn-pick').addEventListener('click', togglePicker);
   $('btn-pause').addEventListener('click', togglePause);
-  // Fix #8 (Round 3): Wire the Undo button
+  // Wire the Undo button
   $('undo-btn').addEventListener('click', undoDelete);
 
   const textInput = $('text-input');
   $('btn-add-text').addEventListener('click', async () => {
     const val = textInput.value;
     textInput.value = '';
-    // Fix #1: Restore typed text if save fails so the user doesn't lose their input.
+    // Restore typed text if save fails so the user doesn't lose their input.
     const ok = await addTextRule(val);
     if (!ok) textInput.value = val;
   });

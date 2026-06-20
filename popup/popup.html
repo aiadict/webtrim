@@ -27,14 +27,11 @@
     <input type="text" id="text-input" placeholder='e.g. AI Overview, Sponsored, Promoted' />
     <button class="btn btn-add" id="btn-add-text">Add Rule</button>
   </div>
-
-  <!-- Round 2 Fix #10: Domain-aware suggestion chips -->
   <div class="suggestions" id="suggestions"></div>
 
   <div class="rules-section">
     <div class="rules-header">
       <span class="rules-title">Rules on this site</span>
-      <!-- Fix #14 (Round 4): hidden-count shown alongside rule count -->
       <div class="rules-meta">
         <span class="hidden-count" id="hidden-count" style="display:none"></span>
         <span class="rules-count" id="rules-count" style="display:none">0</span>
@@ -42,19 +39,13 @@
     </div>
     <div class="rules-list" id="rules-list"></div>
   </div>
-
-  <!-- Fix #8 (Round 3): Undo toast — shown for 5s after deleting a rule -->
   <div class="undo-toast" id="undo-toast">
     <span class="undo-msg">Rule deleted</span>
     <button id="undo-btn">Undo</button>
   </div>
-
-  <!-- Fix #3 (Round 4): Save confirmation toast -->
   <div class="save-toast" id="save-toast">
     <span>✓ Saved permanently</span>
   </div>
-
-  <!-- Fix #8: Storage error toast -->
   <div class="error-toast" id="error-toast">
     <span>Could not save — storage may be full</span>
   </div>

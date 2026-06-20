@@ -74,7 +74,7 @@ body {
   background: #e74c3c;
   color: #fff;
   flex: 1;
-  /* Fix #2: Column layout for main label + subtitle */
+  /* Column layout for main label + subtitle */
   flex-direction: column;
   gap: 2px;
   padding: 8px 12px;
@@ -92,7 +92,7 @@ body {
   50%       { opacity: 0.75; }
 }
 
-/* Fix #2: Pick button two-line structure */
+/* Pick button two-line structure */
 .btn-pick-main {
   font-size: 12px;
   font-weight: 600;
@@ -115,7 +115,7 @@ body {
 
 .btn-secondary:hover { background: #eaeaea; }
 
-/* Fix #5: Amber state = "showing hidden" mode active */
+/* Amber state = "showing hidden" mode active */
 .btn-secondary.active {
   background: #fff3cd;
   color: #856404;
@@ -149,7 +149,7 @@ body {
 
 .btn-add:hover { background: #333; }
 
-/* Fix #10 (Round 2): Suggestion chips */
+/* Suggestion chips */
 .suggestions {
   display: flex;
   flex-wrap: wrap;
@@ -208,21 +208,21 @@ body {
   color: #888;
 }
 
-/* Fix #14 (Round 4): Meta row for hidden count + rule count */
+/* Meta row for hidden count + rule count */
 .rules-meta {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-/* Fix #14: Hidden element count — shown in red for emphasis */
+/* Hidden element count — shown in red for emphasis */
 .hidden-count {
   font-size: 11px;
   font-weight: 600;
   color: #e74c3c;
 }
 
-/* Fix #12: Count badge — only shown when rules > 0 */
+/* Count badge — only shown when rules > 0 */
 .rules-count {
   background: #f0f0f0;
   color: #555;
@@ -238,7 +238,7 @@ body {
   padding: 0 14px 12px;
 }
 
-/* Fix #11 (Round 4): Two-card instructional empty state */
+/* Two-card instructional empty state */
 .empty-state { padding: 4px 0 8px; }
 
 .empty-card {
@@ -286,10 +286,10 @@ body {
 
 .rule-item:last-child { border-bottom: none; }
 
-/* Fix #8 (Round 3): Visual fade when pending deletion */
+/* Visual fade when pending deletion */
 .rule-item.deleting { opacity: 0.3; }
 
-/* Fix #9: "selector" relabelled "click" in JS; CSS class kept for colour */
+/* "selector" relabelled "click" in JS; CSS class kept for colour */
 .rule-type {
   font-size: 10px;
   font-weight: 700;
@@ -309,7 +309,7 @@ body {
   color: #d68910;
 }
 
-/* Fix #6 (Round 3): Labels are human text now — use system font, not monospace */
+/* Labels are human text now — use system font, not monospace */
 .rule-value {
   flex: 1;
   font-size: 11px;
@@ -325,7 +325,7 @@ body {
   text-decoration: line-through;
 }
 
-/* Fix #7 (Round 3): CSS toggle switch replaces ●/○ buttons */
+/* CSS toggle switch replaces ●/○ buttons */
 .rule-toggle {
   position: relative;
   display: inline-flex;
@@ -387,7 +387,7 @@ body {
 
 .rule-delete:hover { color: #e74c3c; }
 
-/* Fix #8 (Round 3): Undo toast */
+/* Undo toast */
 .undo-toast {
   display: none;
   align-items: center;
@@ -415,7 +415,7 @@ body {
 
 #undo-btn:hover { color: #ff6b5b; }
 
-/* Fix #3 (Round 4): Save confirmation toast */
+/* Save confirmation toast */
 .save-toast {
   display: none;
   align-items: center;
@@ -432,7 +432,7 @@ body {
 
 .save-toast.visible { display: flex; }
 
-/* Fix #8: Storage error toast */
+/* Storage error toast */
 .error-toast {
   display: none;
   align-items: center;
